@@ -1,0 +1,93 @@
+# Hetzner Cloud API token
+hcloud_token = "your_api_key"
+
+# Name of the AWS S3 bucket used to store the state files
+s3_bucket_name = "your_bucket_name"
+
+# Main network CIDR block
+network_cidr = "10.0.0.0/16"
+subnets = [
+  "10.0.0.0/19",
+  "10.0.32.0/19",
+  "10.0.64.0/19",
+  "10.0.96.0/19",
+  "10.0.128.0/19",
+  "10.0.160.0/19",
+  "10.0.192.0/19",
+  "10.0.224.0/19",
+]
+
+# Server configuration for LoadBalancer instances
+loadbalancers = {
+  "kubeapi" : {
+    ip_addr     = "10.0.0.2",
+    server_type = "cx11"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+  "ingress" : {
+    ip_addr     = "10.0.0.4",
+    server_type = "cx11"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  }
+}
+
+# Server configuration for Kubernetes API servers
+controlplanes = {
+  "controlplane1" : {
+    ip_addr     = "10.0.128.10",
+    server_type = "cx31"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+  "controlplane2" : {
+    ip_addr     = "10.0.160.20",
+    server_type = "cx31"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+  "controlplane3" : {
+    ip_addr     = "10.0.192.30",
+    server_type = "cx31"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+}
+
+# Server configuration for Kubernetes worker nodes
+nodes = {
+  "node1" : {
+    ip_addr     = "10.0.128.11",
+    server_type = "cx31"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+  "node2" : {
+    ip_addr     = "10.0.160.21",
+    server_type = "cx31"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+  "node3" : {
+    ip_addr     = "10.0.192.31",
+    server_type = "cx31"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+  "node4" : {
+    ip_addr     = "10.0.128.21",
+    server_type = "cx31"
+    image       = "ubuntu-22.04"
+    location    = "nbg1"
+    protection  = false
+  },
+}
