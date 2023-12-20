@@ -1,4 +1,4 @@
-# hcloud
+# hcloud-tf
 
 Infrastructure configuration for Hetzner cloud Kubernetes cluster.
 
