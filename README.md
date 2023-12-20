@@ -2,7 +2,7 @@
 
 Infrastructure configuration for Hetzner cloud Kubernetes cluster.
 
-> IMPORTANT! Keep the `terraform.tfvars` encrypted since it contains
+> If you plan to commit the `terraform.tfvars`, encrypt it since it contains
 the Hetzner API token.
 
 You must provide a Hetzner Cloud API token as the `hcloud_token` 
