@@ -122,13 +122,13 @@ resource "hcloud_server" "controlplane" {
     hcloud_ssh_key.internal.id
   ]
   firewall_ids = [
-    hcloud_firewall.allow_internal.id,
-    hcloud_firewall.allow_ssh.id
+    hcloud_firewall.private.id,
+    hcloud_firewall.ssh.id
   ]
   depends_on = [
     hcloud_ssh_key.internal,
     hcloud_network.main,
-    hcloud_firewall.allow_internal,
+    hcloud_firewall.private,
     hcloud_network_subnet.subnets
   ]
 }
@@ -166,13 +166,13 @@ resource "hcloud_server" "node" {
     hcloud_ssh_key.internal.id
   ]
   firewall_ids = [
-    hcloud_firewall.allow_internal.id,
-    hcloud_firewall.allow_ssh.id
+    hcloud_firewall.private.id,
+    hcloud_firewall.ssh.id
   ]
   depends_on = [
     hcloud_ssh_key.internal,
     hcloud_network.main,
-    hcloud_firewall.allow_internal,
+    hcloud_firewall.private,
     hcloud_network_subnet.subnets
   ]
 }
@@ -210,9 +210,9 @@ resource "hcloud_server" "kubeapilb" {
     hcloud_ssh_key.internal.id
   ]
   firewall_ids = [
-    hcloud_firewall.allow_internal.id,
-    hcloud_firewall.allow_ssh.id,
-    hcloud_firewall.allow_kubeapi.id,
+    hcloud_firewall.private.id,
+    hcloud_firewall.ssh.id,
+    hcloud_firewall.kubeapi.id,
   ]
   depends_on = [
     hcloud_ssh_key.internal,
@@ -254,9 +254,9 @@ resource "hcloud_server" "ingresslb" {
     hcloud_ssh_key.internal.id
   ]
   firewall_ids = [
-    hcloud_firewall.allow_internal.id,
-    hcloud_firewall.allow_ssh.id,
-    hcloud_firewall.allow_http.id,
+    hcloud_firewall.private.id,
+    hcloud_firewall.ssh.id,
+    hcloud_firewall.http.id,
   ]
   depends_on = [
     hcloud_ssh_key.internal,
@@ -266,8 +266,8 @@ resource "hcloud_server" "ingresslb" {
 }
 
 # Firewalls
-resource "hcloud_firewall" "allow_ssh" {
-  name = "allow-ssh"
+resource "hcloud_firewall" "ssh" {
+  name = "ssh"
   rule {
     direction = "in"
     protocol  = "tcp"
@@ -278,8 +278,8 @@ resource "hcloud_firewall" "allow_ssh" {
   }
 }
 
-resource "hcloud_firewall" "allow_kubeapi" {
-  name = "allow-http"
+resource "hcloud_firewall" "kubeapi" {
+  name = "kubeapi"
   rule {
     direction = "in"
     protocol  = "tcp"
@@ -291,8 +291,8 @@ resource "hcloud_firewall" "allow_kubeapi" {
   }
 }
 
-resource "hcloud_firewall" "allow_http" {
-  name = "allow-http"
+resource "hcloud_firewall" "http" {
+  name = "http"
   rule {
     direction = "in"
     protocol  = "tcp"
@@ -313,8 +313,8 @@ resource "hcloud_firewall" "allow_http" {
   }
 }
 
-resource "hcloud_firewall" "allow_internal" {
-  name = "allow-internal"
+resource "hcloud_firewall" "private" {
+  name = "private"
   rule {
     direction = "in"
     protocol  = "tcp"
