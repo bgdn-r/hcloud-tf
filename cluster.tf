@@ -177,7 +177,7 @@ resource "hcloud_server" "node" {
   ]
 }
 
-variable "loadbalancers" {
+variable "kubeapilb" {
   type = map(
     object(
       {
@@ -191,8 +191,52 @@ variable "loadbalancers" {
   )
 }
 
-resource "hcloud_server" "loadbalancer" {
-  for_each          = var.loadbalancers
+resource "hcloud_server" "kubeapilb" {
+  for_each          = var.kubeapilb
+  name              = each.key
+  image             = each.value.image
+  location          = each.value.location
+  server_type       = each.value.server_type
+  delete_protection = each.value.protection
+  network {
+    network_id = hcloud_network.main.id
+    ip         = each.value.ip_addr
+  }
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = true
+  }
+  ssh_keys = [
+    hcloud_ssh_key.internal.id
+  ]
+  firewall_ids = [
+    hcloud_firewall.allow_internal.id,
+    hcloud_firewall.allow_ssh.id,
+    hcloud_firewall.allow_kubeapi.id,
+  ]
+  depends_on = [
+    hcloud_ssh_key.internal,
+    hcloud_network.main,
+    hcloud_network_subnet.subnets
+  ]
+}
+
+variable "ingresslb" {
+  type = map(
+    object(
+      {
+        ip_addr     = string
+        server_type = string
+        image       = string
+        location    = string
+        protection  = bool
+      }
+    )
+  )
+}
+
+resource "hcloud_server" "ingresslb" {
+  for_each          = var.ingresslb
   name              = each.key
   image             = each.value.image
   location          = each.value.location
@@ -217,7 +261,6 @@ resource "hcloud_server" "loadbalancer" {
   depends_on = [
     hcloud_ssh_key.internal,
     hcloud_network.main,
-    hcloud_firewall.allow_http,
     hcloud_network_subnet.subnets
   ]
 }
@@ -231,6 +274,19 @@ resource "hcloud_firewall" "allow_ssh" {
     port      = "22"
     source_ips = [
       "0.0.0.0/0"
+    ]
+  }
+}
+
+resource "hcloud_firewall" "allow_kubeapi" {
+  name = "allow-http"
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "6443"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
     ]
   }
 }

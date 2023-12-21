@@ -17,17 +17,21 @@ subnets = [
   "10.0.224.0/19",
 ]
 
-# Server configuration for LoadBalancer instances
-loadbalancers = {
-  "kubeapi" : {
-    ip_addr     = "10.0.0.2",
+# Kubernetes API loadbalancer configuration
+kubeapilb = {
+  "kubeapilb1": {
+    ip_addr     = "10.0.0.3",
     server_type = "cx11"
     image       = "ubuntu-22.04"
     location    = "nbg1"
     protection  = false
-  },
-  "ingress" : {
-    ip_addr     = "10.0.0.4",
+  }
+}
+
+# Kubernetes Nginx Ingress Controller loadbalancer configuration
+ingresslb = {
+  "ingresslb1":{
+    ip_addr     = "10.0.0.10",
     server_type = "cx11"
     image       = "ubuntu-22.04"
     location    = "nbg1"
