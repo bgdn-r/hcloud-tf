@@ -16,7 +16,7 @@ terraform {
   # backend "s3" {
   #   bucket  = var.s3_bucket_name
   #   region  = "your_aws_region"
-  #   profile = "your_aws_profile"
+  #   profile = "your_aws_profile_name"
   #   key     = "hcloud-tf"
   # }
 }
@@ -34,7 +34,7 @@ provider "hcloud" {
 
 provider "aws" {
   region  = "eu-central-1"
-  profile = "codebehind"
+  profile = "your_aws_profile_name"
 }
 
 variable "s3_bucket_name" {
