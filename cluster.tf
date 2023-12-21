@@ -58,7 +58,7 @@ resource "aws_s3_bucket_versioning" "tfstate" {
 }
 
 # SSH keypair
-resource "hcloud_ssh_key" "internal" {
+resource "hcloud_ssh_key" "main" {
   name       = "kubekey"
   public_key = file("./kubekey.pub")
 }
@@ -119,14 +119,14 @@ resource "hcloud_server" "controlplane" {
     ipv6_enabled = true
   }
   ssh_keys = [
-    hcloud_ssh_key.internal.id
+    hcloud_ssh_key.main.id
   ]
   firewall_ids = [
     hcloud_firewall.private.id,
     hcloud_firewall.ssh.id
   ]
   depends_on = [
-    hcloud_ssh_key.internal,
+    hcloud_ssh_key.main,
     hcloud_network.main,
     hcloud_firewall.private,
     hcloud_network_subnet.subnets
@@ -163,14 +163,14 @@ resource "hcloud_server" "node" {
     ipv6_enabled = true
   }
   ssh_keys = [
-    hcloud_ssh_key.internal.id
+    hcloud_ssh_key.main.id
   ]
   firewall_ids = [
     hcloud_firewall.private.id,
     hcloud_firewall.ssh.id
   ]
   depends_on = [
-    hcloud_ssh_key.internal,
+    hcloud_ssh_key.main,
     hcloud_network.main,
     hcloud_firewall.private,
     hcloud_network_subnet.subnets
@@ -207,7 +207,7 @@ resource "hcloud_server" "kubeapilb" {
     ipv6_enabled = true
   }
   ssh_keys = [
-    hcloud_ssh_key.internal.id
+    hcloud_ssh_key.main.id
   ]
   firewall_ids = [
     hcloud_firewall.private.id,
@@ -215,7 +215,7 @@ resource "hcloud_server" "kubeapilb" {
     hcloud_firewall.kubeapi.id,
   ]
   depends_on = [
-    hcloud_ssh_key.internal,
+    hcloud_ssh_key.main,
     hcloud_network.main,
     hcloud_network_subnet.subnets
   ]
@@ -251,7 +251,7 @@ resource "hcloud_server" "ingresslb" {
     ipv6_enabled = true
   }
   ssh_keys = [
-    hcloud_ssh_key.internal.id
+    hcloud_ssh_key.main.id
   ]
   firewall_ids = [
     hcloud_firewall.private.id,
@@ -259,7 +259,7 @@ resource "hcloud_server" "ingresslb" {
     hcloud_firewall.http.id,
   ]
   depends_on = [
-    hcloud_ssh_key.internal,
+    hcloud_ssh_key.main,
     hcloud_network.main,
     hcloud_network_subnet.subnets
   ]
